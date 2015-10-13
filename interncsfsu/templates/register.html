@@ -1,0 +1,36 @@
+<!-- TODO: place macros in 'macros.html' -->
+{% macro render_field(field) %}
+  <dt>{{ field.label }}
+  <dd>{{ field(**kwargs)|safe }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </dd>
+{% endmacro %}
+
+  <div class="row">
+  <div class="col-lg-6" style="float: none; margin: 20px auto;">
+  <form method="POST" action="." class="form bs-example form-horizontal">
+    {{ form.csrf_token }}
+    <input type="hidden" name="next" value="{{ next }}" />
+    <br>
+    {{ render_field(form.email, class="form-control", placeholder="email") }}
+    <br>
+    {{ render_field(form.password, class="form-control", placeholder="password") }}
+    <br>
+    {{ render_field(form.confirm, class="form-control", placeholder="confirm password") }}
+    <br>
+      {{ render_field(form.name, class="form-control", placeholder="name") }}
+      <br>
+      {{ render_field(form.gpa, class="form-control", placeholder="gpa") }}
+      <br>
+      {{ render_field(form.interest, class="form-control", placeholder="interest") }}
+    <br>
+    <button type="submit" value="Register" class="btn btn-primary">Register</button>
+  </form>
+  </div>
+  </div>

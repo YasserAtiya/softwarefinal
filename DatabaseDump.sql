@@ -86,7 +86,7 @@ CREATE TABLE `Student` (
   `GPA` double DEFAULT NULL,
   `Interest` varchar(45) DEFAULT NULL,
   `Email` varchar(45) DEFAULT NULL,
-  `Password` varchar(45) DEFAULT NULL,
+  `Password` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`StudentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
