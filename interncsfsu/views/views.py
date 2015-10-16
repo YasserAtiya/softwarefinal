@@ -13,7 +13,6 @@ def index():
 
 @mod.route('/register/', methods=['GET', 'POST'])
 def register():
-    next = ''
     if request.method == 'GET':
         if 'next' in request.args:
              next = request.args['next']
@@ -33,7 +32,7 @@ def register():
 
         if 'next' in request.form and request.form and request.form['next']:
             return redirect(request.form['next'])
-        return redirect(url_for('mod./'))
+        return redirect(url_for('.index'))
 
     return render_template("register.html", form=form, next=next)
 
