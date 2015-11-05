@@ -199,6 +199,7 @@ CREATE TABLE `User` (
   `Email` varchar(45) NOT NULL,
   `Password` varchar(45) DEFAULT NULL,
   `Role` varchar(45) DEFAULT NULL,
+  `Authenticated` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -209,7 +210,7 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (2,'yatiya@cs.fsu.edu',NULL,'Student'),(3,'cpatino@cs.fsu.edu',NULL,'Student'),(4,'jake@statefarm.com',NULL,'Company');
+INSERT INTO `User` VALUES (2,'yatiya@cs.fsu.edu',NULL,'Student',NULL),(3,'cpatino@cs.fsu.edu',NULL,'Student',NULL),(4,'jake@statefarm.com',NULL,'Company',NULL);
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,4 +282,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-11-04 15:22:40
+-- Dump completed on 2015-11-05 12:31:22
