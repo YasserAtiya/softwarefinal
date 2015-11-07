@@ -1,12 +1,28 @@
-<!-- Placeholder document -->
-<body>
-  <section class="container">
-    <div class="login">
-      <h1>Student Login</h1>
-      <form method="post" action="index.html">
-        <p><input type="text" name="login" value="" placeholder="Email"></p>
-        <p><input type="password" name="password" value="" placeholder="Password"></p>
-        <p class="submit"><input type="submit" name="commit" value="Login"></p>
-      </form>
-    </div>
-</body>
+<!-- TODO: place macros in 'macros.html' -->
+{% macro render_field(field) %}
+  <dt>{{ field.label }}
+  <dd>{{ field(**kwargs)|safe }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </dd>
+{% endmacro %}
+
+<div class="row">
+  <div class="col-lg-6" style="float: none; margin: 20px auto;">
+  <form method="POST" action="." class="form bs-example form-horizontal">
+    {{ form.csrf_token }}
+    <input type="hidden" name="next" value="{{ next }}" />
+    <br>
+    {{ render_field(form.email, class="form-control", placeholder="email") }}
+    <br>
+    {{ render_field(form.password, class="form-control", placeholder="password") }}
+    <br>
+    <button type="submit" value="Login" class="btn btn-primary">Login</button>
+  </form>
+  </div>
+  </div>

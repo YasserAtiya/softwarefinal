@@ -28,8 +28,7 @@ CREATE TABLE `Resume` (
   `Author` int(11) NOT NULL,
   `File` blob,
   PRIMARY KEY (`Author`),
-  KEY `fk_Resume_1` (`Author`),
-  CONSTRAINT `fk_Resume_1` FOREIGN KEY (`Author`) REFERENCES `Student` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`Author`) REFERENCES `Student`(`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -59,8 +58,7 @@ CREATE TABLE `Internship` (
   `ApplicationLink` varchar(45) DEFAULT NULL,
   `About` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `fk_Internship_1` (`Company`),
-  CONSTRAINT `fk_Internship_1` FOREIGN KEY (`Company`) REFERENCES `Company` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`Company`) REFERENCES `Company`(`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -86,8 +84,7 @@ CREATE TABLE `Company` (
   `Website` varchar(100) DEFAULT NULL,
   `About` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `UserID` (`ID`),
-  CONSTRAINT `UserID` FOREIGN KEY (`ID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`ID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -141,12 +138,9 @@ CREATE TABLE `Messages` (
   `Read` tinyint(4) DEFAULT NULL,
   `ContactingID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `fk_Messages_1` (`FromUser`),
-  KEY `fk_Messages_2` (`ToUser`),
-  KEY `fk_Messages_3` (`ContactingID`),
-  CONSTRAINT `fk_Messages_3` FOREIGN KEY (`ContactingID`) REFERENCES `Contacting` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_Messages_1` FOREIGN KEY (`FromUser`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_Messages_2` FOREIGN KEY (`ToUser`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`ContactingID`) REFERENCES `Contacting` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`FromUser`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`ToUser`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -171,10 +165,8 @@ CREATE TABLE `StudentInterest` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `InterestID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `fk_StudentInterest_1` (`UserID`),
-  KEY `fk_StudentInterest_2` (`InterestID`),
-  CONSTRAINT `fk_StudentInterest_2` FOREIGN KEY (`InterestID`) REFERENCES `PossibleInterest` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_StudentInterest_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`InterestID`) REFERENCES `PossibleInterest` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`UserID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -222,14 +214,13 @@ DROP TABLE IF EXISTS `Student`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Student` (
-  `ID` int(11) NOT NULL DEFAULT '0',
+  `ID` int(11) NOT NULL,
   `FName` varchar(45) DEFAULT NULL,
   `LName` varchar(45) DEFAULT NULL,
   `PreviousLogin` tinyint(4) DEFAULT NULL,
   `About` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `fk_Student_1` (`ID`),
-  CONSTRAINT `fk_Student_1` FOREIGN KEY (`ID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`ID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -257,10 +248,8 @@ CREATE TABLE `Contacting` (
   `Name` varchar(45) DEFAULT NULL,
   `LatestDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `fk_Contacting_1` (`UserID`),
-  KEY `fk_Contacting_2` (`ContactID`),
-  CONSTRAINT `fk_Contacting_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_Contacting_2` FOREIGN KEY (`ContactID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`UserID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`ContactID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

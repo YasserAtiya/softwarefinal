@@ -1,16 +1,32 @@
-from flask import Flask, render_template, url_for
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+import re
+
+from flask import Flask
+from flask_login import LoginManager
+from interncsfsu.database import db
+#from flask_mail import Mail
+
+
+import interncsfsu.users.models as models
 
 app = Flask(__name__,static_url_path='/static')
 app.config.from_object('config')
 
-db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = '/'
+db.init_app(app)
+#mail = Mail(app)
 
-from interncsfsu.views.views import mod as views_mod
+from interncsfsu.views import mod as views_mod
 app.register_blueprint(views_mod)
 
 app.debug = True
+
+
+@login_manager.user_loader
+def load_user(id):
+    return models.User.query.filter_by(id=id).first()
+
 
 if __name__ == '__main__':
     app.run()
