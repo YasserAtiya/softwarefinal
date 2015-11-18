@@ -50,13 +50,12 @@ DROP TABLE IF EXISTS `Internship`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Internship` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CompanyID` int(11) NOT NULL,
   `Position` varchar(100) DEFAULT NULL,
-  `Company` int(11) NOT NULL,
-  `Span` varchar(45) DEFAULT NULL,
-  `Requirements` varchar(1000) DEFAULT NULL,
-  `Applicants` varchar(45) DEFAULT NULL,
+  `StartDate` DATE DEFAULT NULL,
+  `Location` varchar(100),
   `ApplicationLink` varchar(45) DEFAULT NULL,
-  `About` varchar(1000) DEFAULT NULL,
+  `Description` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   FOREIGN KEY (`Company`) REFERENCES `Company` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
