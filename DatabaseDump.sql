@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 5.6.24, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `intern` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `intern`;
+-- MySQL dump 10.13  Distrib 5.5.40, for debian-linux-gnu (i686)
 --
--- Host: localhost    Database: intern
+-- Host: localhost    Database: Intern
 -- ------------------------------------------------------
--- Server version	5.6.27-log
+-- Server version	5.5.40-0ubuntu0.12.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,100 +18,118 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `company`
+-- Table structure for table `Resume`
 --
 
-DROP TABLE IF EXISTS `company`;
+DROP TABLE IF EXISTS `Resume`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `company` (
+CREATE TABLE `Resume` (
+  `Author` int(11) NOT NULL,
+  `File` varchar(100) NOT NULL,
+  PRIMARY KEY (`Author`),
+  FOREIGN KEY (`Author`) REFERENCES `Student`(`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Resume`
+--
+
+LOCK TABLES `Resume` WRITE;
+/*!40000 ALTER TABLE `Resume` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Resume` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Internship`
+--
+
+DROP TABLE IF EXISTS `Internship`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Internship` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Position` varchar(100) DEFAULT NULL,
+  `Company` int(11) NOT NULL,
+  `Span` varchar(45) DEFAULT NULL,
+  `Requirements` varchar(1000) DEFAULT NULL,
+  `Applicants` varchar(45) DEFAULT NULL,
+  `ApplicationLink` varchar(45) DEFAULT NULL,
+  `About` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  FOREIGN KEY (`Company`) REFERENCES `Company` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Internship`
+--
+
+LOCK TABLES `Internship` WRITE;
+/*!40000 ALTER TABLE `Internship` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Internship` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Company`
+--
+
+DROP TABLE IF EXISTS `Company`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Company` (
   `ID` int(11) NOT NULL DEFAULT '0',
   `Name` varchar(45) DEFAULT NULL,
   `Website` varchar(100) DEFAULT NULL,
   `About` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  CONSTRAINT `company_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `UserID` (`ID`),
+  CONSTRAINT `UserID` FOREIGN KEY (`ID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `company`
+-- Dumping data for table `Company`
 --
 
-LOCK TABLES `company` WRITE;
-/*!40000 ALTER TABLE `company` DISABLE KEYS */;
-INSERT INTO `company` VALUES (4,'Statefarm','statefarm.com','Insurance.');
-/*!40000 ALTER TABLE `company` ENABLE KEYS */;
+LOCK TABLES `Company` WRITE;
+/*!40000 ALTER TABLE `Company` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Company` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `contacting`
+-- Table structure for table `PossibleInterest`
 --
 
-DROP TABLE IF EXISTS `contacting`;
+DROP TABLE IF EXISTS `PossibleInterest`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `contacting` (
+CREATE TABLE `PossibleInterest` (
+  `Name` varchar(100) NOT NULL,
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `UserID` int(11) DEFAULT NULL,
-  `ContactID` int(11) DEFAULT NULL,
-  `Name` varchar(45) DEFAULT NULL,
-  `LatestDate` datetime DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `UserID` (`UserID`),
-  KEY `ContactID` (`ContactID`),
-  CONSTRAINT `contacting_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `contacting_ibfk_2` FOREIGN KEY (`ContactID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `contacting`
+-- Dumping data for table `PossibleInterest`
 --
 
-LOCK TABLES `contacting` WRITE;
-/*!40000 ALTER TABLE `contacting` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contacting` ENABLE KEYS */;
+LOCK TABLES `PossibleInterest` WRITE;
+/*!40000 ALTER TABLE `PossibleInterest` DISABLE KEYS */;
+INSERT INTO `PossibleInterest` VALUES ('C#',1),('C++',2),('Java',3),('SQL',4);
+/*!40000 ALTER TABLE `PossibleInterest` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `internship`
+-- Table structure for table `Messages`
 --
 
-DROP TABLE IF EXISTS `internship`;
+DROP TABLE IF EXISTS `Messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `internship` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `CompanyID` int(11) NOT NULL,
-  `Position` varchar(100) DEFAULT NULL,
-  `StartDate` datetime DEFAULT NULL,
-  `Location` varchar(100) DEFAULT NULL,
-  `ApplicationLink` varchar(45) DEFAULT NULL,
-  `Description` varchar(1000) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `CompanyID` (`CompanyID`),
-  CONSTRAINT `internship_ibfk_1` FOREIGN KEY (`CompanyID`) REFERENCES `company` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `internship`
---
-
-LOCK TABLES `internship` WRITE;
-/*!40000 ALTER TABLE `internship` DISABLE KEYS */;
-/*!40000 ALTER TABLE `internship` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `messages`
---
-
-DROP TABLE IF EXISTS `messages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `messages` (
+CREATE TABLE `Messages` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FromUser` int(11) DEFAULT NULL,
   `ToUser` int(11) DEFAULT NULL,
@@ -119,138 +139,60 @@ CREATE TABLE `messages` (
   `Read` tinyint(4) DEFAULT NULL,
   `ContactingID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `ContactingID` (`ContactingID`),
-  KEY `FromUser` (`FromUser`),
-  KEY `ToUser` (`ToUser`),
-  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`ContactingID`) REFERENCES `contacting` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`FromUser`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `messages_ibfk_3` FOREIGN KEY (`ToUser`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_Messages_1` (`FromUser`),
+  KEY `fk_Messages_2` (`ToUser`),
+  KEY `fk_Messages_3` (`ContactingID`),
+  CONSTRAINT `fk_Messages_3` FOREIGN KEY (`ContactingID`) REFERENCES `Contacting` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_Messages_1` FOREIGN KEY (`FromUser`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_Messages_2` FOREIGN KEY (`ToUser`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `messages`
+-- Dumping data for table `Messages`
 --
 
-LOCK TABLES `messages` WRITE;
-/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
+LOCK TABLES `Messages` WRITE;
+/*!40000 ALTER TABLE `Messages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `possibleinterest`
+-- Table structure for table `StudentInterest`
 --
 
-DROP TABLE IF EXISTS `possibleinterest`;
+DROP TABLE IF EXISTS `StudentInterest`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `possibleinterest` (
-  `Name` varchar(100) NOT NULL,
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `possibleinterest`
---
-
-LOCK TABLES `possibleinterest` WRITE;
-/*!40000 ALTER TABLE `possibleinterest` DISABLE KEYS */;
-INSERT INTO `possibleinterest` VALUES ('C#',1),('C++',2),('Java',3),('SQL',4);
-/*!40000 ALTER TABLE `possibleinterest` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `resume`
---
-
-DROP TABLE IF EXISTS `resume`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `resume` (
-  `Author` int(11) NOT NULL,
-  `File` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`Author`),
-  CONSTRAINT `resume_ibfk_1` FOREIGN KEY (`Author`) REFERENCES `student` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `resume`
---
-
-LOCK TABLES `resume` WRITE;
-/*!40000 ALTER TABLE `resume` DISABLE KEYS */;
-/*!40000 ALTER TABLE `resume` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `student`
---
-
-DROP TABLE IF EXISTS `student`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `student` (
-  `ID` int(11) NOT NULL,
-  `FName` varchar(45) DEFAULT NULL,
-  `LName` varchar(45) DEFAULT NULL,
-  `PreviousLogin` tinyint(4) DEFAULT NULL,
-  `Year` varchar(15) DEFAULT NULL,
-  `GradDate` datetime DEFAULT NULL,
-  `About` varchar(1000) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  CONSTRAINT `student_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `student`
---
-
-LOCK TABLES `student` WRITE;
-/*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` VALUES (2,'Yasser','Atiya',1,'Senior','2016-05-01 00:00:00',NULL),(3,'Christian','Patino',1,'Junior','2016-12-05 00:00:00',NULL);
-/*!40000 ALTER TABLE `student` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `studentinterest`
---
-
-DROP TABLE IF EXISTS `studentinterest`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `studentinterest` (
+CREATE TABLE `StudentInterest` (
   `UserID` int(11) DEFAULT NULL,
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `InterestID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `InterestID` (`InterestID`),
-  KEY `UserID` (`UserID`),
-  CONSTRAINT `studentinterest_ibfk_1` FOREIGN KEY (`InterestID`) REFERENCES `possibleinterest` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `studentinterest_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_StudentInterest_1` (`UserID`),
+  KEY `fk_StudentInterest_2` (`InterestID`),
+  CONSTRAINT `fk_StudentInterest_2` FOREIGN KEY (`InterestID`) REFERENCES `PossibleInterest` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_StudentInterest_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `studentinterest`
+-- Dumping data for table `StudentInterest`
 --
 
-LOCK TABLES `studentinterest` WRITE;
-/*!40000 ALTER TABLE `studentinterest` DISABLE KEYS */;
-/*!40000 ALTER TABLE `studentinterest` ENABLE KEYS */;
+LOCK TABLES `StudentInterest` WRITE;
+/*!40000 ALTER TABLE `StudentInterest` DISABLE KEYS */;
+/*!40000 ALTER TABLE `StudentInterest` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user`
+-- Table structure for table `User`
 --
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `User`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user` (
+CREATE TABLE `User` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Email` varchar(45) NOT NULL,
   `Password` varchar(45) DEFAULT NULL,
@@ -261,13 +203,71 @@ CREATE TABLE `user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `User`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (2,'yatiya@cs.fsu.edu','yasser','Student',1),(3,'patino@cs.fsu.edu','test','Student',1),(4,'jake@statefarm.com','pass','Company',1);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+LOCK TABLES `User` WRITE;
+/*!40000 ALTER TABLE `User` DISABLE KEYS */;
+INSERT INTO `User` VALUES (2,'yatiya@cs.fsu.edu',NULL,'Student',NULL),(3,'cpatino@cs.fsu.edu',NULL,'Student',NULL),(4,'jake@statefarm.com',NULL,'Company',NULL);
+/*!40000 ALTER TABLE `User` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Student`
+--
+
+DROP TABLE IF EXISTS `Student`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Student` (
+  `ID` int(11) NOT NULL DEFAULT '0',
+  `FName` varchar(45) DEFAULT NULL,
+  `LName` varchar(45) DEFAULT NULL,
+  `PreviousLogin` tinyint(4) DEFAULT NULL,
+  `Year` varchar(15) DEFAULT NULL,
+  `GradDate` DATE DEFAULT NULL,
+  `About` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  FOREIGN KEY (`ID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Student`
+--
+
+LOCK TABLES `Student` WRITE;
+/*!40000 ALTER TABLE `Student` DISABLE KEYS */;
+INSERT INTO `Student` VALUES (2,'Yasser','Atiya',0,'Senior', 2016-05-01, NULL);
+/*!40000 ALTER TABLE `Student` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Contacting`
+--
+
+DROP TABLE IF EXISTS `Contacting`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Contacting` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) DEFAULT NULL,
+  `ContactID` int(11) DEFAULT NULL,
+  `Name` varchar(45) DEFAULT NULL,
+  `LatestDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  FOREIGN KEY (`UserID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`ContactID`) REFERENCES `User` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Contacting`
+--
+
+LOCK TABLES `Contacting` WRITE;
+/*!40000 ALTER TABLE `Contacting` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Contacting` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -279,4 +279,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-11-18 12:17:59
+-- Dump completed on 2015-11-05 12:31:22
