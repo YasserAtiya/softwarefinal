@@ -5,4 +5,5 @@ Jinja2==2.8
 Werkzeug==0.10.4
 mysql-connector-python=-2.1.2
 WTForms==2.0.2
+WTForms-Components==0.9.8
 Flask-Mail==0.9.1

@@ -19,8 +19,8 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -43,8 +43,8 @@
       </div>
 
   <div class="offset-by-four column">
-  <a class="button button-primary" href="student_reg.html">I'm a Student</a>
-  <a class="button button-primary" href="employer_reg.html">I'm an Employer</a>
+  <a class="button button-primary" a href="/student/login/">I'm a Student</a>
+  <a class="button button-primary" a href="/company/login/">I'm an Employer</a>
 
   </div>
   </div>

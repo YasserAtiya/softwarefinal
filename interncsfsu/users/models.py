@@ -20,8 +20,7 @@ class User(db.Model):
     is_active = True
     is_anonymous = False
 
-    def __init__(self, id, email, password, role, authenticated, active=True, anonymous=False):
-        self.id = id
+    def __init__(self, email, password, role, authenticated, active=True, anonymous=False):
         self.email = email
         self.password = password
         self.role = role
@@ -48,6 +47,8 @@ class Student(db.Model):
     FName = db.Column(db.String(const.MAX_STRING))
     LName = db.Column(db.String(const.MAX_STRING))
     PreviousLogin = db.Column(db.Integer)
+    Year = db.Column(db.String(const.MAX_YEAR))
+    GradDate = db.Column(db.DateTime)
     About = db.Column(db.String(const.MAX_MSG))
 
     def __repr__(self):
@@ -64,7 +65,7 @@ class Company(db.Model):
     website = db.Column(db.String(const.MAX_WEBSITE))
     about = db.Column(db.String(const.MAX_MSG))
 
-    def __init__(self, id, name, website, about):
+    def __init__(self, id, name, website, about=''):
         self.id = id
         self.name = name
         self.website = website

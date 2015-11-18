@@ -1,16 +1,4 @@
-<!-- TODO: place macros in 'macros.html' -->
-{% macro render_field(field) %}
-  <dt>{{ field.label }}
-  <dd>{{ field(**kwargs)|safe }}
-  {% if field.errors %}
-    <ul class=errors>
-    {% for error in field.errors %}
-      <li>{{ error }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-  </dd>
-{% endmacro %}
+
 
 <div class="row">
   <div class="col-lg-6" style="float: none; margin: 20px auto;">

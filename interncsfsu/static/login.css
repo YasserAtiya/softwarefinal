@@ -9,7 +9,7 @@ h2{
   text-shadow: 0 1px 0 #000;
 }
 a{
-  text-decoration: none; color: #EC5C93; 
+  text-decoration: none; color: #EC5C93;
 }
 .ribbon{
   background: rgba(200,200,200,.5);
@@ -20,9 +20,9 @@ a{
   top: 19px;
   border: 1px solid rgba(255,255,255,.3);
   border-top: 2px solid rgba(255,255,255,.5);
-  border-bottom: 0;  
+  border-bottom: 0;
   border-radius: 5px 5px 0 0;
-  box-shadow: 0 0 3px rgba(0,0,0,.7); 
+  box-shadow: 0 0 3px rgba(0,0,0,.7);
 }
 .ribbon:before{
   content:"";
@@ -126,11 +126,11 @@ button{
   text-shadow: 0 1px 2px #21756A;
 }
 button:hover{
- background: linear-gradient(to bottom, rgba(107,198,186,1) 0%,rgba(57,175,154,1) 100%);  
+ background: linear-gradient(to bottom, rgba(107,198,186,1) 0%,rgba(57,175,154,1) 100%);
 }
 button:active{
   box-shadow: inset 0 0 5px #000;
-  background: linear-gradient(to bottom, rgba(57,175,154,1) 0%,rgba(107,198,186,1) 100%); 
+  background: linear-gradient(to bottom, rgba(57,175,154,1) 0%,rgba(107,198,186,1) 100%);
 }
 
 /* ### TEST PASS GOOGLE IO ### */
@@ -175,7 +175,7 @@ hr{
 .io img{
   width: 150px;
   border-radius: 100%;
-  border: 4px solid 
+  border: 4px solid
   margin-top: 10px;
   border: 4px solid #FFF;
   margin: 18px auto 0;

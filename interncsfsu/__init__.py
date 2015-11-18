@@ -3,7 +3,7 @@ import re
 from flask import Flask
 from flask_login import LoginManager
 from interncsfsu.database import db
-#from flask_mail import Mail
+from flask_mail import Mail
 
 
 import interncsfsu.users.models as models
@@ -15,7 +15,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = '/'
 db.init_app(app)
-#mail = Mail(app)
+mail = Mail(app)
 
 from interncsfsu.views import mod as views_mod
 app.register_blueprint(views_mod)
