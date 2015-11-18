@@ -4,13 +4,13 @@ from flask_login import login_user, logout_user, current_user, login_required
 
 from interncsfsu.database import db
 from interncsfsu.users.models import User, Student, Company
-from interncsfsu.users.forms import (StudentLoginForm, CompanyLoginForm, CompanyApplication, StudentSettingsForm, CompanySettingsForm)
+from interncsfsu.users.forms import (StudentLoginForm, CompanyLoginForm, CompanyApplication, StudentSettingsForm, CompanySettingsForm, InternshipForm)
 from interncsfsu.users.decorators import requires_roles
 from interncsfsu.util.security import send_email, ts, admins
 from config import SECRET_KEY
 
 
-from interncsfsu.objects.models import Resume
+from interncsfsu.objects.models import Resume, Internship
 from werkzeug.utils import secure_filename
 from config import UPLOAD_PATH
 import os
@@ -189,3 +189,17 @@ def company_settings():
         db.session.commit()
         return redirect(url_for('.index'))
     return render_template('company_settings.html', form=form)
+
+@mod.route('/company/internship/', methods=['GET','POST'])
+@login_required
+@requires_roles('Company')
+def company_internship():
+    form = InternshipForm(request.form)
+    if form.validate_on_submit():
+        user = User.query.filter_by(id=current_user.get_id()).first_or_404()
+        internship = Internship(user.id, form.position.data, form.startdate.data, form.location.data, form.applicationlink.data,form.description.data)
+        user.company.internships.append(internship)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('.index'))
+    return render_template('company_internships.html', form=form)
