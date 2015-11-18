@@ -57,7 +57,7 @@ CREATE TABLE `Internship` (
   `ApplicationLink` varchar(45) DEFAULT NULL,
   `Description` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  FOREIGN KEY (`Company`) REFERENCES `Company` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`CompanyID`) REFERENCES `Company` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -207,7 +207,6 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (2,'yatiya@cs.fsu.edu',NULL,'Student',NULL),(3,'cpatino@cs.fsu.edu',NULL,'Student',NULL),(4,'jake@statefarm.com',NULL,'Company',NULL);
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,7 +236,6 @@ CREATE TABLE `Student` (
 
 LOCK TABLES `Student` WRITE;
 /*!40000 ALTER TABLE `Student` DISABLE KEYS */;
-INSERT INTO `Student` VALUES (2,'Yasser','Atiya',0,'Senior', 2016-05-01, NULL);
 /*!40000 ALTER TABLE `Student` ENABLE KEYS */;
 UNLOCK TABLES;
 
