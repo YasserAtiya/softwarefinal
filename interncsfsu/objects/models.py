@@ -17,7 +17,7 @@ class Internship(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     companyid = db.Column(db.Integer, db.ForeignKey('Company.id'))
     position = db.Column(db.String(const.MAX_POSITION))
-    startdate = db.Column(db.DateTime)
+    startdate = db.Column(db.Date)
     location = db.Column(db.String(const.MAX_LOCATION))
     applicationlink = db.Column(db.String(const.MAX_APPL_LINK))
     description = db.Column(db.String(const.MAX_DESCRIPTION))
