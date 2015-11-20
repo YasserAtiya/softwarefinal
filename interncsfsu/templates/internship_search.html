@@ -36,8 +36,8 @@
     </thead>
     <tbody>
           {% for i in internships %}
-            <tr>
-                <td>{{ i.company.name }}</td>
+            <tr a href="/student/search/listing">
+                <td><a  href="/student/search/listing/?int_id={{ i.id }}"> {{ i.company.name }} </a></td>
                 <td>{{ i.position }}</td>
                 <td>{{ i.location }}</td>
                 <td>{{ i.startdate }}</td>
@@ -46,6 +46,7 @@
           {% endfor %}
     </tbody>
 </table>
+
 
 
 <script>

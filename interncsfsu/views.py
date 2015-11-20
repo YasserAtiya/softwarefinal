@@ -211,3 +211,12 @@ def searchkeyword():
     internships = Internship.query.join(Company).all()
     return render_template('internship_search.html', internships=internships)
 
+@mod.route('/student/search/listing/', methods=['GET','POST'])
+@login_required
+@requires_roles('Student')
+def showinternship():
+    int_id = request.args.get('int_id')
+    internship = Internship.query.filter_by(id=int_id).first()
+    user = User.query.filter_by(id=internship.companyid).first()
+    print(user.email)
+    return render_template('internship_listing.html',internship=internship, user=user)

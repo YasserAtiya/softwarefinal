@@ -65,6 +65,7 @@ class Company(db.Model):
     website = db.Column(db.String(const.MAX_WEBSITE))
     about = db.Column(db.String(const.MAX_MSG))
 
+
     def __init__(self, id, name, website, about=''):
         self.id = id
         self.name = name

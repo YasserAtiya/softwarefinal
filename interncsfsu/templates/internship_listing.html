@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Internship Listing</title>
+</head>
+<body>
+<h1>{{ internship.company.name }}</h1>
+<h3>{{ internship.loaction }}</h3>
+<h3>{{ internship.position }}</h3>
+<h4>{{ internship.startdate }}</h4>
+<a href="http://www.{{ internship.applicationlink }}">{{ internship.applicationlink }}</a>
+<p>{{ internship.description }}</p>
+<!-- <input type="button" onclick="location.href=mailto:{{ user.email }};" value="Contact Employer" />
+<button type="button" value="Contact" class="btn btn-primary">Contact</button>
+<a href="mailto:{{ user.email }}">Contact</a>
+ -->
+<input type="button" value="Contact Employer" onClick="parent.location='mailto:{{ user.email }}?subject='"/>
+
+</body>
+</html>
