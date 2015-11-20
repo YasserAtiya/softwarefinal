@@ -17,6 +17,7 @@
                <ul class="errors">{% for error in form.resume.errors %}<li>{{ error }}</li>{% endfor %}</ul>
         {% endif %}
     </div><div>
+    {{ form.about.label }}: <br> </br>
     {{ form.about(rows=25, cols=50) }}
 </div>
         <button type="submit" value="Save" class="btn btn-primary">Save</button>
