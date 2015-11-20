@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <script>
+        $(function(){
+            var $rows = $('#internship_tb tbody tr');
+            $('#search').keyup(function() {
+            var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                reg = RegExp(val, 'i'),
+                text;
+
+            $rows.show().filter(function() {
+                text = $(this).text().replace(/\s+/g, ' ');
+                return !reg.test(text);
+            }).hide();
+            });
+        });
+    </script>
+    <title>Internship Search</title>
+</head>
+<body>
+
+<h1>Internship Finder</h1>
+<input type="text" id="search" placeholder="Type to search">
+<table id="internship_tb">
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>Position</th>
+            <th>Location</th>
+            <th>Start Date</th>
+        </tr>
+    </thead>
+    <tbody>
+          {% for i in internships %}
+            <tr>
+                <td>{{ i.company.name }}</td>
+                <td>{{ i.position }}</td>
+                <td>{{ i.location }}</td>
+                <td>{{ i.startdate }}</td>
+                <td style="display:none;">{{ i.description }}</td>
+                </tr>
+          {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+var tf = new TableFilter('my-table-id', {
+    base_path: '../tablefilter/'
+});
+tf.init();
+</script>
+
+
+</body>
+</html>

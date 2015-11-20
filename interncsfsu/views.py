@@ -203,3 +203,11 @@ def company_internship():
         db.session.commit()
         return redirect(url_for('.index'))
     return render_template('company_internships.html', form=form)
+
+@mod.route('/student/search/', methods=['GET','POST'])
+@login_required
+@requires_roles('Student')
+def searchkeyword():
+    internships = Internship.query.join(Company).all()
+    return render_template('internship_search.html', internships=internships)
+
