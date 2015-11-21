@@ -1,35 +1,62 @@
-<form method="POST" action="." class="form bs-example form-horizontal">
-      {{ form.csrf_token }}
-      <input type="hidden" name="next" value="{{ next }}" />
-  <div>
-      {{ form.position.label }}: {{ form.position(class="css_class") }}
-      {% if form.position.errors %}
-        <ul class="errors">{% for error in form.position.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-  <div>
-      {{ form.startdate.label }}: {{ form.startdate(class="css_class") }}
-      {% if form.startdate.errors %}
-        <ul class="errors">{% for error in form.startdate.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-  <div>
-      {{ form.location.label }}: {{ form.location(class="css_class") }}
-      {% if form.location.errors %}
-        <ul class="errors">{% for error in form.location.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-  <div>
-      {{ form.applicationlink.label }}: {{ form.applicationlink(class="css_class") }}
-      {% if form.applicationlink.errors %}
-        <ul class="errors">{% for error in form.applicationlink.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-  <div>
-      {{ form.description.label }}: {{ form.description(class="css_class") }}
-      {% if form.description.errors %}
-        <ul class="errors">{% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-    <button type="submit" value="Login" class="btn btn-primary">Add</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <script>
+        $(function(){
+            var $rows = $('#internship_tb tbody tr');
+            $('#search').keyup(function() {
+            var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                reg = RegExp(val, 'i'),
+                text;
+
+            $rows.show().filter(function() {
+                text = $(this).text().replace(/\s+/g, ' ');
+                return !reg.test(text);
+            }).hide();
+            });
+        });
+    </script>
+    <title>Internship Search</title>
+</head>
+<body>
+
+<h1>Internships Listing</h1>
+<input type="text" id="search" placeholder="Type to search">
+<table id="internship_tb">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Location</th>
+            <th>Start Date</th>
+            <th>Remove<th>
+        </tr>
+    </thead>
+    <tbody>
+          {% for i in internships %}
+            <tr>
+                <td>{{ i.position }}</td>
+                <td>{{ i.location }}</td>
+                <td>{{ i.startdate }}</td>
+                <td style="display:none;">{{ i.description }}</td>
+                <td><a  href="/company/internship?int_id={{ i.id }}&remove=1">Remove</a></td>
+            </tr>
+          {% endfor %}
+    </tbody>
+</table>
+
+<h3><a href="/company/internship/add">Add Internship</a></h3>
+
+
+<script>
+var tf = new TableFilter('my-table-id', {
+    base_path: '../tablefilter/'
+});
+tf.init();
+</script>
+
+
+</body>
+</html>

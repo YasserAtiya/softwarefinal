@@ -194,15 +194,36 @@ def company_settings():
 @login_required
 @requires_roles('Company')
 def company_internship():
+    internships = Internship.query.filter_by(companyid=current_user.get_id()).all()
+    remove= "0"
+    remove= request.args.get('remove')
+    print('remove')
+    print(remove)
+    int_id = request.args.get('int_id')
+    print(int_id)
+    if remove == "1":
+        int_id = request.args.get('int_id')
+        print(int_id)
+        internship = Internship.query.filter_by(id=int_id).first_or_404()
+        db.session.delete(internship)
+        db.session.commit()
+        return redirect('/company/internship/')
+    return render_template('company_internships.html', internships=internships)
+
+@mod.route('/company/internship/add/', methods=['GET','POST'])
+@login_required
+@requires_roles('Company')
+def company_add_internship():
     form = InternshipForm(request.form)
+    print('out')
     if form.validate_on_submit():
         user = User.query.filter_by(id=current_user.get_id()).first_or_404()
         internship = Internship(user.id, form.position.data, form.startdate.data, form.location.data, form.applicationlink.data,form.description.data)
         user.company.internships.append(internship)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('.index'))
-    return render_template('company_internships.html', form=form)
+        return redirect('/company/internship/')
+    return render_template('company_internships_add.html', form=form)
 
 @mod.route('/student/search/', methods=['GET','POST'])
 @login_required
@@ -216,7 +237,7 @@ def searchkeyword():
 @requires_roles('Student')
 def showinternship():
     int_id = request.args.get('int_id')
-    internship = Internship.query.filter_by(id=int_id).first()
-    user = User.query.filter_by(id=internship.companyid).first()
+    internship = Internship.query.filter_by(id=int_id).first_or_404()
+    user = User.query.filter_by(id=internship.companyid).first_or_404()
     print(user.email)
     return render_template('internship_listing.html',internship=internship, user=user)
