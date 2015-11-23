@@ -1,0 +1,15 @@
+<link rel="stylesheet" href= "{{ url_for('static', filename='css/send_announcement.css') }}">
+<form method="POST" action="." class="form bs-example form-horizontal">
+  <fieldset class = "announceform">
+    <br>
+      {{ form.csrf_token }}
+      <input type="hidden" name="next" value="{{ next }}" />
+  <div>
+      {{ form.year_selections.label }}: {{ form.year_selections(class="css_class") }}
+      {% if form.year_selections.errors %}
+        <ul class="errors">{% for error in form.year_selections.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+  </fieldset>
+
+</form>

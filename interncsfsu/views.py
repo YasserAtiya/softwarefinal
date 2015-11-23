@@ -241,3 +241,17 @@ def showinternship():
     user = User.query.filter_by(id=internship.companyid).first_or_404()
     print(user.email)
     return render_template('internship_listing.html',internship=internship, user=user)
+
+@mod.route('/company/search/', methods=['GET', 'POST'])
+@login_required
+@requires_roles('Company')
+def company_search():
+    students = Student.query.join(User).all()
+    return render_template('student_search.html', students=students)
+
+@mod.route('/company/search/student/<id>')
+@login_required
+@requires_roles('Company')
+def showstudent(id):
+    user = User.query.filter_by(id=id).first()
+    return render_template('student_listing.html', student=user.student)

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student</title>
+</head>
+<body>
+<h1>{{ student.FName }} {{ student.LName }}</h1>
+<h3>Year: {{ student.Year }}</h3>
+<h3>Graduation Date: {{ student.GradDate }}</h3>
+{% if student.resume %}
+<a href="{{student.resume.path}}">Resume</a>
+{% endif %}
+{% if student.About %}
+<h4>About</h4>
+<p>{{ student.About }}</p>
+{% endif %}
+<input type="button" value="Contact Student" onClick="parent.location='mailto:{{ student.user.email }}?subject='"/>
+
+</body>
+</html>
