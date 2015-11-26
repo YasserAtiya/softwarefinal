@@ -17,6 +17,7 @@ import os
 
 mod = Blueprint('views', __name__, url_prefix='')
 
+
 @mod.route('/student/home/')
 @login_required
 @requires_roles('Student')
@@ -28,6 +29,7 @@ def home():
 @requires_roles('Company')
 def emp_home():
     return render_template('employer_homepage.html')
+
 
 @mod.route('/')
 def index():
@@ -206,21 +208,15 @@ def company_settings():
 @login_required
 @requires_roles('Company')
 def company_internship():
-    internships = Internship.query.filter_by(companyid=current_user.get_id()).all()
-    remove= "0"
-    remove= request.args.get('remove')
-    print('remove')
-    print(remove)
-    int_id = request.args.get('int_id')
-    print(int_id)
-    if remove == "1":
-        int_id = request.args.get('int_id')
-        print(int_id)
-        internship = Internship.query.filter_by(id=int_id).first_or_404()
-        db.session.delete(internship)
+    form = InternshipForm(request.form)
+    if form.validate_on_submit():
+        user = User.query.filter_by(id=current_user.get_id()).first_or_404()
+        internship = Internship(user.id, form.position.data, form.startdate.data, form.location.data, form.applicationlink.data,form.description.data)
+        user.company.internships.append(internship)
+        db.session.add(user)
         db.session.commit()
-        return redirect('/company/internship/')
-    return render_template('company_internships.html', internships=internships)
+        return redirect(url_for('.index'))
+    return render_template('company_internships.html', form=form)
 
 @mod.route('/company/internship/delete', methods=['GET', 'POST'])
 @login_required
@@ -228,21 +224,6 @@ def company_internship():
 def delete_internship():
     return render_template('company_delete_internship.html')
 
-
-@mod.route('/company/internship/add/', methods=['GET','POST'])
-@login_required
-@requires_roles('Company')
-def company_add_internship():
-    form = InternshipForm(request.form)
-    print('out')
-    if form.validate_on_submit():
-        user = User.query.filter_by(id=current_user.get_id()).first_or_404()
-        internship = Internship(user.id, form.position.data, form.startdate.data, form.location.data, form.applicationlink.data,form.description.data)
-        user.company.internships.append(internship)
-        db.session.add(user)
-        db.session.commit()
-        return redirect('/company/internship/')
-    return render_template('company_internships_add.html', form=form)
 
 @mod.route('/student/search/', methods=['GET','POST'])
 @login_required
@@ -256,21 +237,13 @@ def searchkeyword():
 @requires_roles('Student')
 def showinternship():
     int_id = request.args.get('int_id')
-    internship = Internship.query.filter_by(id=int_id).first_or_404()
-    user = User.query.filter_by(id=internship.companyid).first_or_404()
+    internship = Internship.query.filter_by(id=int_id).first()
+    user = User.query.filter_by(id=internship.companyid).first()
     print(user.email)
     return render_template('internship_listing.html',internship=internship, user=user)
 
-@mod.route('/company/search/', methods=['GET', 'POST'])
+@mod.route('/student/home', methods=['GET', 'POST'])
 @login_required
-@requires_roles('Company')
-def company_search():
-    students = Student.query.join(User).all()
-    return render_template('student_search.html', students=students)
-
-@mod.route('/company/search/student/<id>')
-@login_required
-@requires_roles('Company')
-def showstudent(id):
-    user = User.query.filter_by(id=id).first()
-    return render_template('student_listing.html', student=user.student)
+@requires_roles('Student')
+def student_homepage():
+    return render_template('student_homepage.html')

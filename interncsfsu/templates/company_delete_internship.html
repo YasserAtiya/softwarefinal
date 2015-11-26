@@ -43,9 +43,19 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><img src="/static/images/fsu_seal.png" style="width:58px;height:58px"></li>
-            <li class="active"><a href="/student/home">Home</a></li>
+            <li class="active"><a href="/company/home">Home</a></li>
             <li><a href="#search">Search</a></li>
-            <li><a href="/student/settings/">Settings</a></li>
+
+               <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listings<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+
+                <li><a href="/company/internships">Add Postings</a></li>
+                <li><a href="/company/internships">Delete Postings</a></li>
+              </ul>
+            </li>
+
+            <li><a href="/company/settings/">Settings</a></li>
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -60,37 +70,7 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-<form method="POST" enctype="multipart/form-data" action="." class="form bs-example form-horizontal">
-      {{ form.csrf_token }}
-  <input type="hidden" name="next" value="{{ next }}" />
-  <div>
-    {{ form.first_name.label }}: {{ form.first_name(class="css_class") }}
-    {% if form.first_name.errors %}
-    <ul class="errors">{% for error in form.first_name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-
-  <div>
-    {{ form.last_name.label }}: {{ form.last_name(class="css_class") }}
-    {% if form.last_name.errors %}
-    <ul class="errors">{% for error in form.last_name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-
-  <div>
-    {{ form.resume.label }}: {{ form.resume(class="css_class") }}
-    {% if form.resume.errors %}
-    <ul class="errors">{% for error in form.resume.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-
-
-  <div>
-  {{ form.about.label }}: <br> </br>
-  {{ form.about(rows=10, cols=70) }}
-  </div>
-  <button type="button" value="Save" class="btn btn-primary btn-lg active">Save</button>
-  </form>
+      <p>Delete Internship Posting</p>
       </div>
 
     </div> <!-- /container -->

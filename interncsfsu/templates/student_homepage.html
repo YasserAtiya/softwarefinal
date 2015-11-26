@@ -7,7 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <!--<link rel="icon" href="../../favicon.ico"> -->
+    <link rel="icon" href="/static/images/fsu_seal.png">
 
     <title>FSU Internship Homepage</title>
 
@@ -43,7 +43,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><img src="/static/images/fsu_seal.png" style="width:58px;height:58px"></li>
-            <li class="active"><a href="/student/home">Home</a></li>
+            <li class="active"><a href="#">Home</a></li>
             <li><a href="#search">Search</a></li>
             <li><a href="/student/settings/">Settings</a></li>
 
@@ -60,37 +60,11 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-<form method="POST" enctype="multipart/form-data" action="." class="form bs-example form-horizontal">
-      {{ form.csrf_token }}
-  <input type="hidden" name="next" value="{{ next }}" />
-  <div>
-    {{ form.first_name.label }}: {{ form.first_name(class="css_class") }}
-    {% if form.first_name.errors %}
-    <ul class="errors">{% for error in form.first_name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-
-  <div>
-    {{ form.last_name.label }}: {{ form.last_name(class="css_class") }}
-    {% if form.last_name.errors %}
-    <ul class="errors">{% for error in form.last_name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-
-  <div>
-    {{ form.resume.label }}: {{ form.resume(class="css_class") }}
-    {% if form.resume.errors %}
-    <ul class="errors">{% for error in form.resume.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-  </div>
-
-
-  <div>
-  {{ form.about.label }}: <br> </br>
-  {{ form.about(rows=10, cols=70) }}
-  </div>
-  <button type="button" value="Save" class="btn btn-primary btn-lg active">Save</button>
-  </form>
+        <h2>Student's Information:</h2>
+        <p>First Name: </p>
+        <p>Last Name: </p>
+        <p>School Year: </p>
+        <p>Graduation Date: </p>
       </div>
 
     </div> <!-- /container -->
