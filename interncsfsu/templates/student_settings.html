@@ -7,9 +7,9 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <!--<link rel="icon" href="../../favicon.ico"> -->
+    <link rel="icon" href="/static/images/fsu_seal.png">
 
-    <title>FSU Internship Homepage</title>
+     <title>CS FSU Internships</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
@@ -26,6 +26,11 @@
   </head>
 
   <body>
+    <style>
+    body {
+    background-color: #862633;
+    }
+  </style>
 
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top">
@@ -43,13 +48,13 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><img src="/static/images/fsu_seal.png" style="width:58px;height:58px"></li>
-            <li class="active"><a href="/student/home">Home</a></li>
-            <li><a href="#search">Search</a></li>
-            <li><a href="/student/settings/">Settings</a></li>
+            <li><a href="/student/home">Home</a></li>
+            <li><a href="/student/search">Search</a></li>
+            <li class="active"><a href="/student/settings/">Settings</a></li>
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Logout</a></li>
+            <li><a href="/logout">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -59,25 +64,27 @@
     <div class="container">
 
       <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
+      <div class="jumbotron" style="background-color:#ffffff !important">
+        <h1 style="font-size: 38.5px; text-align: center">Settings</h1>
 <form method="POST" enctype="multipart/form-data" action="." class="form bs-example form-horizontal">
       {{ form.csrf_token }}
   <input type="hidden" name="next" value="{{ next }}" />
   <div>
-    {{ form.first_name.label }}: {{ form.first_name(class="css_class") }}
+    {{ form.first_name.label }}: {{ student.FName }}
     {% if form.first_name.errors %}
     <ul class="errors">{% for error in form.first_name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
   </div>
 
   <div>
-    {{ form.last_name.label }}: {{ form.last_name(class="css_class") }}
+    {{ form.last_name.label }}: {{ student.LName }}
     {% if form.last_name.errors %}
     <ul class="errors">{% for error in form.last_name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
   </div>
 
   <div>
+    <br>
     {{ form.resume.label }}: {{ form.resume(class="css_class") }}
     {% if form.resume.errors %}
     <ul class="errors">{% for error in form.resume.errors %}<li>{{ error }}</li>{% endfor %}</ul>
@@ -86,10 +93,11 @@
 
 
   <div>
+    <br> <br>
   {{ form.about.label }}: <br> </br>
   {{ form.about(rows=10, cols=70) }}
   </div>
-  <button type="button" value="Save" class="btn btn-primary btn-lg active">Save</button>
+  <button type="submit" value="Save" class="btn btn-primary btn-lg active">Save</button>
   </form>
       </div>
 

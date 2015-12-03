@@ -1,10 +1,11 @@
-from flask import (Blueprint, flash, render_template, redirect, url_for, request, abort)
+from flask import (Blueprint, flash, render_template, redirect, url_for, request, abort, session)
 from flask_login import login_user, logout_user, current_user, login_required
 #from werkzeug.security import generate_password_hash, check_password_hash
 
 from interncsfsu.database import db
 from interncsfsu.users.models import User, Student, Company
-from interncsfsu.users.forms import (StudentLoginForm, CompanyLoginForm, CompanyApplication, StudentSettingsForm, CompanySettingsForm, InternshipForm)
+from interncsfsu.users.forms import (StudentLoginForm, CompanyLoginForm, CompanyApplication,
+                                     StudentSettingsForm, CompanySettingsForm, InternshipForm, ContactForm)
 from interncsfsu.users.decorators import requires_roles
 from interncsfsu.util.security import send_email, ts, admins
 from config import SECRET_KEY
@@ -21,22 +22,33 @@ mod = Blueprint('views', __name__, url_prefix='')
 @login_required
 @requires_roles('Student')
 def home():
-    return render_template('student_homepage.html')
+    user = User.query.filter_by(id=current_user.get_id()).first_or_404()
+    return render_template('student_homepage.html', student=user.student)
 
 @mod.route('/company/home/')
 @login_required
 @requires_roles('Company')
 def emp_home():
-    return render_template('employer_homepage.html')
+    internships = current_user.company.internships
+    return render_template('employer_homepage.html', company=current_user.company, internships=internships)
 
 @mod.route('/')
 def index():
+    if not current_user.is_anonymous:
+        if current_user.role == 'Student':
+            return redirect(url_for('.home'))
+        elif current_user.role == 'Company':
+            return redirect((url_for('.emp_home')))
     return render_template('index.html')
 
 @mod.route('/company/login/', methods=['GET', 'POST'])
 def company_login():
     if not current_user.is_anonymous:
-        return redirect(url_for('.index'))
+        if current_user.role == 'Student':
+            return redirect(url_for('.home'))
+        elif current_user.role == 'Company':
+            return redirect((url_for('.emp_home')))
+
     next = ''
     if request.method == 'GET':
         if 'next' in request.args:
@@ -45,12 +57,11 @@ def company_login():
     if form.validate_on_submit():
         company = User.query.filter_by(email=form.email.data, password=form.password.data).first()
         if company is not None:
-            if not company.is_authenticated:
+            if not company.authenticated:
                 flash('Not authenticated')
-                return redirect(url_for('.company_login'))
-            if login_user(company):
-                print('Logged in')
                 return redirect(url_for('.index'))
+            if login_user(company):
+                return redirect(url_for('.emp_home'))
             else:
                 flash("Incorrect Username or Password")
                 return render_template('login.html')
@@ -63,7 +74,11 @@ def company_login():
 @mod.route('/student/login/', methods=['GET', 'POST'])
 def student_login():
     if not current_user.is_anonymous:
-        return redirect(url_for('.index'))
+        if current_user.role == 'Student':
+            return redirect(url_for('.home'))
+        elif current_user.role == 'Company':
+            return redirect((url_for('.emp_home')))
+
     #Obtain redirect
     next = ''
     if request.method == 'GET':
@@ -73,21 +88,19 @@ def student_login():
     #Get information from form and attempt to login
     form = StudentLoginForm(request.form)
     if form.validate_on_submit():
-        print(form.email.data, form.password.data)
         #Passwords are not validated the normal way
         student = User.query.filter_by(email=form.email.data, password=form.password.data).first()
         if student is None:
             flash('Incorrect Email/Password')
         elif login_user(student):
-                print('hello')
-                return redirect(url_for('.index'))
+                session['applied_to'] = []
+                return redirect(url_for('.home'))
         else:
             flash('Error Logging in')
 
     if 'next' in request.form and request.form and request.form['next']:
         return redirect(request.form['next'])
 
-    #return render_template('login.html', form=form,next=next)
     return render_template('student_reg.html',form=form)
 
 
@@ -105,7 +118,10 @@ for confirmation via email.
 @mod.route('/company/apply/', methods=['GET', 'POST'])
 def company_apply():
     if not current_user.is_anonymous:
-        return redirect(url_for('.index'))
+        if current_user.role == 'Student':
+            return redirect(url_for('.home'))
+        elif current_user.role == 'Company':
+            return redirect((url_for('.emp_home')))
 
     form = CompanyApplication(request.form)
     if form.validate_on_submit():
@@ -153,13 +169,11 @@ def confirm_user(token):
 @login_required
 @requires_roles('Student')
 def student_settings():
+    user = User.query.filter_by(id=current_user.get_id()).first_or_404()
     form = StudentSettingsForm(request.form)
+    if user.student.About:
+        form.about.data = user.student.About
     if form.validate_on_submit():
-        user = User.query.filter_by(id=current_user.get_id()).first_or_404()
-        if form.first_name.data:
-         user.student.FName = form.first_name.data
-        if form.last_name.data:
-            user.student.LName = form.last_name.data
         if form.about.data:
             user.student.About = form.about.data
 
@@ -173,21 +187,25 @@ def student_settings():
             full_path = os.path.join(UPLOAD_PATH, filename)
             if user.student.resume:
                 db.session.delete(user.student.resume)
-            user.student.resume = Resume(full_path)
+            rel_path = '/static/uploads/%d.%s' % (user.id, extension)
+            user.student.resume = Resume(rel_path)
             file.save(full_path)
 
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('.index'))
-    return render_template('student_settings.html', form=form)
+        return redirect(url_for('.home'))
+    return render_template('student_settings.html', form=form, student=user.student)
 
 @mod.route('/company/settings/', methods=['GET','POST'])
 @login_required
 @requires_roles('Company')
 def company_settings():
+    user = User.query.filter_by(id=current_user.get_id()).first_or_404()
     form = CompanySettingsForm(request.form)
+    form.name.data = user.company.name
+    form.website.data = user.company.website
+    form.contact.data = user.email
     if form.validate_on_submit():
-        user = User.query.filter_by(id=current_user.get_id()).first_or_404()
         if form.name.data:
             user.company.name = form.name.data
         if form.website.data:
@@ -199,7 +217,7 @@ def company_settings():
 
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('.index'))
+        return redirect(url_for('.emp_home'))
     return render_template('company_settings.html', form=form)
 
 @mod.route('/company/internship/', methods=['GET','POST'])
@@ -234,7 +252,6 @@ def delete_internship():
 @requires_roles('Company')
 def company_add_internship():
     form = InternshipForm(request.form)
-    print('out')
     if form.validate_on_submit():
         user = User.query.filter_by(id=current_user.get_id()).first_or_404()
         internship = Internship(user.id, form.position.data, form.startdate.data, form.location.data, form.applicationlink.data,form.description.data)
@@ -251,14 +268,12 @@ def searchkeyword():
     internships = Internship.query.join(Company).all()
     return render_template('internship_search.html', internships=internships)
 
-@mod.route('/student/search/listing/', methods=['GET','POST'])
+@mod.route('/student/search/listing/<id>', methods=['GET','POST'])
 @login_required
 @requires_roles('Student')
-def showinternship():
-    int_id = request.args.get('int_id')
-    internship = Internship.query.filter_by(id=int_id).first_or_404()
+def showinternship(id):
+    internship = Internship.query.get(id)
     user = User.query.filter_by(id=internship.companyid).first_or_404()
-    print(user.email)
     return render_template('internship_listing.html',internship=internship, user=user)
 
 @mod.route('/company/search/', methods=['GET', 'POST'])
@@ -274,3 +289,91 @@ def company_search():
 def showstudent(id):
     user = User.query.filter_by(id=id).first()
     return render_template('student_listing.html', student=user.student)
+
+@mod.route('/company/send/<id>', methods=['GET', 'POST'])
+@login_required
+@requires_roles('Company')
+def send_to_student(id):
+    company = Company.query.get(current_user.get_id())
+    user = User.query.filter_by(id=id).first_or_404()
+    subject = '[INTERNCSFSU] A Company Has Expressed Interest'
+    html = render_template('company_interest.html', company=company)
+    send_email(subject=subject, html_body=html, recipients=[user.email])
+    return redirect(url_for('.company_search'))
+
+from flask_mail import Message
+from interncsfsu import app, mail
+from config import ADMINS as admins
+
+@mod.route('/student/send/<id>', methods=['GET', 'POST'])
+@login_required
+@requires_roles('Student')
+def send_to_company(id):
+    student = Student.query.get(current_user.get_id())
+    user = User.query.filter_by(id=id).first_or_404()
+    subject = '[INTERNCSFSU] A Student Has Expressed Interest'
+    html = render_template('student_interest.html', student=student)
+    msg = Message(subject, sender=admins[0], recipients=[user.email])
+    msg.html = html
+    if student.resume:
+        #system dependent path
+        path = 'C:\\Users\\Christian\\Desktop\\interncsfsu\\interncsfsu\\static\\uploads\\%i.pdf' % (student.ID)
+        with app.open_resource(path) as fp:
+            msg.attach("resume.pdf", "application/pdf", fp.read())
+
+    mail.send(msg)
+    return redirect(url_for('.searchkeyword'))
+
+@mod.route('/company/message/', methods=['GET', 'POST'])
+@login_required
+@requires_roles('Company')
+def message_all():
+    form = ContactForm(request.form)
+    recipients = []
+    if form.validate_on_submit():
+        if '0' in form.students.data:
+            recipients += Student.query.filter_by(Year="Freshman").all()
+        if '1' in form.students.data:
+            recipients += Student.query.filter_by(Year="Sophomore").all()
+        if '2' in form.students.data:
+            recipients += Student.query.filter_by(Year="Junior").all()
+        if '3' in form.students.data:
+            recipients += Student.query.filter_by(Year="Senior").all()
+
+        subject = form.subject.data
+        body = form.body.data
+        recipients = [student.user.email for student in recipients]
+        send_email(subject=subject, html_body=body, recipients=recipients)
+        return redirect(url_for('.message_all'))
+
+    return render_template('message_all.html', form=form)
+
+@mod.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    form = CompanyLoginForm(request.form)
+    if form.validate_on_submit():
+        admin = User.query.filter_by(email=form.email.data, password=form.password.data,role='Admin').first_or_404()
+        if (login_user(admin)):
+            return redirect(url_for('.admin_home'))
+        else:
+            abort(404)
+    return render_template('admin_login.html', form=form)
+
+
+@mod.route('/admin/', methods=['GET', 'POST'])
+@login_required
+@requires_roles('Admin')
+def admin_home():
+    companies = Company.query.all()
+    return render_template('admin_home.html', companies=companies)
+
+@mod.route('/admin/delete/company/<id>', methods=['GET', 'POST'])
+@login_required
+@requires_roles('Admin')
+def admin_remove(id):
+    company = Company.query.get(id)
+    company.is_authenticated = False
+    company.user.authenticated = False
+    db.session.add(company)
+    db.session.commit()
+    return redirect(url_for('.admin_home'))

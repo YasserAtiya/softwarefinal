@@ -55,7 +55,7 @@ class Student(db.Model):
         return '<Student ID %r , Student Name %r %r>' % (self.ID, self.FName, self.LName)
 
     def get_id(self):
-        return str(self.id)
+        return str(self.ID)
 
 
 class Company(db.Model):
@@ -64,7 +64,6 @@ class Company(db.Model):
     name = db.Column(db.String(const.MAX_STRING))
     website = db.Column(db.String(const.MAX_WEBSITE))
     about = db.Column(db.String(const.MAX_MSG))
-
 
     def __init__(self, id, name, website, about=''):
         self.id = id

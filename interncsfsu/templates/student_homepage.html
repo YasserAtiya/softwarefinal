@@ -26,6 +26,11 @@
   </head>
 
   <body>
+    <style>
+    body {
+    background-color: #862633;
+    }
+  </style>
 
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top">
@@ -44,12 +49,12 @@
           <ul class="nav navbar-nav">
             <li><img src="/static/images/fsu_seal.png" style="width:58px;height:58px"></li>
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#search">Search</a></li>
+            <li><a href="/student/search">Search</a></li>
             <li><a href="/student/settings/">Settings</a></li>
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Logout</a></li>
+            <li><a href="/logout">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -59,12 +64,14 @@
     <div class="container">
 
       <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h2>Student's Information:</h2>
-        <p>First Name: </p>
-        <p>Last Name: </p>
-        <p>School Year: </p>
-        <p>Graduation Date: </p>
+      <div class="jumbotron" style="background-color:#ffffff !important">
+        <h2>Information:</h2>
+        <p>{{ student.FName }} {{ student.LName }}</p>
+        <p>Year: {{ student.Year }} </p>
+        <p>Graduation Date: {{ student.GradDate }} </p>
+        {% if student.resume %}
+          <p><a href="{{student.resume.file}}">Resume</a></p>
+        {% endif %}
       </div>
 
     </div> <!-- /container -->

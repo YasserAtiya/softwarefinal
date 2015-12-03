@@ -9,13 +9,16 @@
 <h3>Year: {{ student.Year }}</h3>
 <h3>Graduation Date: {{ student.GradDate }}</h3>
 {% if student.resume %}
-<a href="{{student.resume.path}}">Resume</a>
+<a href="{{student.resume.file}}">Resume</a>
 {% endif %}
 {% if student.About %}
 <h4>About</h4>
 <p>{{ student.About }}</p>
 {% endif %}
-<input type="button" value="Contact Student" onClick="parent.location='mailto:{{ student.user.email }}?subject='"/>
+
+<form action="/company/send/{{student.user.id}}" method="POST">
+    <input type="submit" value="Contact Student">
+</form>
 
 </body>
 </html>

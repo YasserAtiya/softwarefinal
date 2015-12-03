@@ -1,0 +1,12 @@
+A Student has expressed interest.<br>
+Here is their information {% if student.resume %} and an attached resume{% endif %}:<br>
+Name: {{ student.FName }} {{student.LName }}<br>
+Year: {{ student.Year }} <br>
+
+For futher contact, please reply to this address:<br>
+{{ student.user.email }}<br>
+
+<p>
+--<br>
+Thank you.
+</p>

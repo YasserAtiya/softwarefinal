@@ -7,16 +7,24 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <!--<link rel="icon" href="../../favicon.ico"> -->
-      <link rel="icon" href="/static/images/fsu_seal.png">
+    <link rel="icon" href="/static/images/fsu_seal.png">
 
     <title>CS FSU Internships</title>
+
+    <!-- Pure CSS Templates -->
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='css/navbar-static-top.css') }}" rel="stylesheet">
+
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tablesorter.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+    <link href="{{ url_for('static', filename='css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/student_search.css') }}" rel="stylesheet">
 
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -27,8 +35,7 @@
   </head>
 
   <body>
-
-    <style>
+  <style>
     body {
     background-color: #862633;
     }
@@ -46,11 +53,33 @@
           </button>
           <!--<a class="navbar-brand" href="#">FSU Internships</a> -->
 
+
+          <!-- FSU Seal on top bar -->
+          <img src="/static/images/fsu_seal.png" style="width:100px;height:100px">
+
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/"><img src="/static/images/fsu_seal.png" style="width:58px;height:58px"></a></li>
 
+            <li><a href="/company/home">Home</a></li>
+            <li><a href="/company/search">Search</a></li>
+
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listings<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+
+                <li><a href="/company/internship/add">Add</a></li>
+
+              </ul>
+            </li>
+
+            <li><a href="/company/settings/">Settings</a></li>
+            <li class="active"><a href="#">Message</a></li>
+
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -61,43 +90,27 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron" style="background-color:#ffffff !important">
-          <h1 style="font-size: 38.5px; text-align: center">Company Application</h1>
-
-{% macro render_field(field) %}
-  <dt>{{ field.label }}
-  <dd>{{ field(**kwargs)|safe }}
-  {% if field.errors %}
-    <ul class=errors>
-    {% for error in field.errors %}
-      <li>{{ error }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-    </dd>
-  {% endmacro %}
-
-    <div class="row">
-    <div class="col-lg-6" style="float: none; margin: 20px auto;">
-    <form method="POST" action="." class="form bs-example form-horizontal">
+        <h1 style="font-size: 38.5px; text-align: center">Send Message</h1>
+       <form method="POST" action="." class="form bs-example form-horizontal">
       {{ form.csrf_token }}
       <input type="hidden" name="next" value="{{ next }}" />
-      <br>
-      {{ render_field(form.company_name, class="form-control", placeholder="Company Name") }}
-      <br>
-      {{ render_field(form.company_website, class="form-control", placeholder="Company Website") }}
-      <br>
-      {{ render_field(form.contact, class="form-control", placeholder="Contact Email") }}
-      <br>
-      {{ render_field(form.password, class="form-control", placeholder="Password") }}
-      <br>
-      {{ render_field(form.confirm, class="form-control", placeholder="Confirm Password") }}
-      <br>
-      <button type="submit" value="Register" class="btn btn-primary">Register</button>
-    </form>
-    </div>
-    </div>
-      </div>
-
+  <div>
+      {{ form.students.label }}: {{ form.students(class="css_class") }}
+      {% if form.students.errors %}
+        <ul class="errors">{% for error in form.students.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div><div>
+      {{ form.subject.label }}: {{ form.subject(class="css_class") }}
+      {% if form.subject.errors %}
+        <ul class="errors">{% for error in form.subject.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div><div>
+    <br>{{ form.body.label }}:<br> {{ form.body(rows=10,cols=70) }}
+    {% if form.body.errors %}
+        <ul class="errors">{% for error in form.body.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+</div>
+        <button type="submit" value="Send" class="btn btn-primary">Send</button>
     </div> <!-- /container -->
 
 

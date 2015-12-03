@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from flask_wtf.file import FileAllowed, FileField, FileRequired
-from wtforms import StringField, PasswordField, TextAreaField ,validators, DateField
+from wtforms import StringField, PasswordField, TextAreaField ,validators, DateField, SelectMultipleField, widgets
 from wtforms_components import If
 from config import ALLOWED_EXTENSIONS as extensions
 from interncsfsu.users.constants import MAX_MSG as max_msg
@@ -40,4 +40,12 @@ class InternshipForm(Form):
     startdate = StringField('Start Date', validators=[validators.DataRequired()])
     location = StringField('Location', validators=[validators.DataRequired()])
     applicationlink = StringField('Application Link', validators=[validators.Optional()])
-    description = StringField('Description', validators=[validators.DataRequired()])
+    description = TextAreaField('Description', validators=[validators.DataRequired()])
+
+class ContactForm(Form):
+    students = SelectMultipleField('Students', choices=[('0', 'Freshman'), ('1', 'Sophomore'), ('2', 'Junior'),
+                                                        ('3', 'Senior')], option_widget=widgets.CheckboxInput(),
+                                   widget=widgets.ListWidget(prefix_label=False))
+    subject = StringField('Subject', validators=[validators.DataRequired()])
+    body = TextAreaField('Message', validators=[validators.DataRequired()])
+
