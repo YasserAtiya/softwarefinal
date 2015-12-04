@@ -358,7 +358,7 @@ def message_all():
         if '3' in form.students.data:
             recipients += Student.query.filter_by(Year="Senior").all()
 
-        subject = form.subject.data
+        subject = '[CSFSUINTERN] %s' % (form.subject.data)
         body = form.body.data
         recipients = [student.user.email for student in recipients]
         send_email(subject=subject, html_body=body, recipients=recipients)
