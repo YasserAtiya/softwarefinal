@@ -5,7 +5,8 @@ from flask_login import login_user, logout_user, current_user, login_required
 from interncsfsu.database import db
 from interncsfsu.users.models import User, Student, Company
 from interncsfsu.users.forms import (StudentLoginForm, CompanyLoginForm, CompanyApplication,
-                                     StudentSettingsForm, CompanySettingsForm, InternshipForm, ContactForm)
+                                     StudentSettingsForm, CompanySettingsForm, InternshipForm, ContactForm,
+                                     InternshipEditForm)
 from interncsfsu.users.decorators import requires_roles
 from interncsfsu.util.security import send_email, ts, admins
 from config import SECRET_KEY
@@ -240,11 +241,14 @@ def company_internship():
         return redirect('/company/internship/')
     return render_template('company_internships.html', internships=internships)
 
-@mod.route('/company/internship/delete', methods=['GET', 'POST'])
+@mod.route('/company/internship/delete/<id>', methods=['GET', 'POST'])
 @login_required
 @requires_roles('Company')
-def delete_internship():
-    return render_template('company_delete_internship.html')
+def delete_internship(id):
+    internship = Internship.query.get(id)
+    db.session.delete(internship)
+    db.session.commit()
+    return redirect(url_for('.emp_home'))
 
 
 @mod.route('/company/internship/add/', methods=['GET','POST'])
@@ -258,8 +262,22 @@ def company_add_internship():
         user.company.internships.append(internship)
         db.session.add(user)
         db.session.commit()
-        return redirect('/company/internship/')
+        return redirect(url_for('.emp_home'))
     return render_template('company_internships_add.html', form=form)
+
+@mod.route('/company/internship/edit/<id>', methods=['GET', 'POST'])
+@login_required
+@requires_roles('Company')
+def edit_internship(id):
+    internship = Internship.query.get(id)
+    form = InternshipEditForm(request.form, obj=internship)
+    if form.validate_on_submit():
+        form.id.data = internship.id
+        form.populate_obj(internship)
+        db.session.add(internship)
+        db.session.commit()
+        return redirect(url_for('.emp_home'))
+    return render_template('edit_internship.html', form=form)
 
 @mod.route('/student/search/', methods=['GET','POST'])
 @login_required

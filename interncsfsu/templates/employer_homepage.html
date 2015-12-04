@@ -103,6 +103,7 @@
                  <th>Position</th>
                  <th>Location</th>
                  <th>Start Date</th>
+                 <th>Edit</th>
                  <th>Delete</th>
               </tr>
             </thead>
@@ -112,7 +113,8 @@
                 <td>{{ i.position }}</td>
                 <td>{{ i.location }}</td>
                 <td>{{ i.startdate }}</td>
-                <td><a href="/company/internship/delete/{{i.id}}" class="btn btn-info" role="button">Delete</a></td>
+                <td><a href="/company/internship/edit/{{i.id}}" class="btn btn-primary" role="button">Edit</a></td>
+                <td><a href="/company/internship/delete/{{i.id}}" class="btn btn-primary" role="button">Delete</a></td>
                 </tr>
           {% endfor %}
     </tbody>
